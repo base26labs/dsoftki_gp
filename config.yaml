@@ -1,0 +1,43 @@
+defaults:
+    - gp/dsoft_ki/config
+    - gp/dsvgp/config
+    - gp/ddsvgp/config
+    - gp/softki/config
+    - gp/svgp/config
+    - gp/dexact_gp/config
+
+model: dsoftki
+
+data_dir: data/uci_datasets/uci_datasets
+
+dataset:
+    name: branin
+    num_workers: 1
+    train_frac: 0.5
+    val_frac: 0.0
+
+synthetic:
+    N: 1000
+
+md22:
+    unit_cube: false
+
+uci:
+    get_forces: true
+    standardize: true
+    n_neighbors: 3
+
+nbody:
+    n_particles: 10
+    n_dims: 3
+    get_forces: true
+    standardize: true
+    unit_cube: true
+
+wandb:
+    watch: false
+    group: test
+    entity: base26
+    project: dsoftki
+
+draw: false
