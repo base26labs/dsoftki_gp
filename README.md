@@ -1,5 +1,8 @@
 # DSoftKI: Scalable GP Regression with Derivatives
 
+This repository contains an implementation of DSoftKI: scalable GP regression with derivative observations.
+
+
 
 ## Quick Start
 
@@ -73,7 +76,7 @@ python run.py \
 | `gp.dsoft_ki.model.min_T` | Minimum temperature value (default: 5e-5) |
 | `gp.dsoft_ki.model.mll_approx` | MLL approximation: `exact`, `hutchinson`, `hutchinson_fallback` |
 | `gp.dsoft_ki.model.fit_chunk_size` | Batch size for fitting (default: 256) |
-| `gp.dsoft_ki.model.solver` | Linear solver: `solve`, `cholesky`, `cg` (default: cg) |
+| `gp.dsoft_ki.model.solver` | Linear solver: `solve`, `cg` (default: cg) |
 | `gp.dsoft_ki.model.cg_tolerance` | Conjugate gradient tolerance (default: 1e-5) |
 | `gp.dsoft_ki.model.device` | Device for inference (e.g., `cuda:0`, `cpu`) |
 | `gp.dsoft_ki.model.fit_device` | Device for fitting (e.g., `cuda:0`, `cpu`) |
@@ -114,31 +117,3 @@ python run.py \
 | `nbody.n_particles` | Number of particles in N-body system |
 | `nbody.n_dims` | Spatial dimensions for N-body (default: 3) |
 
-
-### Manual Install (Alternative)
-
-```bash
-pyenv install 3.12
-pyenv virtualenv 3.12 dsoftki
-pyenv activate dsoftki
-
-pip install torch torchvision torchaudio
-pip install tqdm requests wandb
-pip install scipy scikit-learn pandas matplotlib omegaconf hydra-core
-pip install gpytorch
-pip install seaborn
-pip install botorch
-pip install -e .
-```
-
-### Using the Environment
-
-To activate the environment in the future:
-```bash
-pyenv activate dsoftki
-```
-
-To deactivate:
-```bash
-pyenv deactivate
-```
