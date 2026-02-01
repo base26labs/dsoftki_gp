@@ -1,6 +1,6 @@
 # DSoftKI: Scalable GP Regression with Derivatives
 
-This repository contains an implementation of DSoftKI: scalable GP regression with derivative observations.
+This repository contains an implementation of [DSoftKI](https://openreview.net/pdf?id=fbonXp38r9): scalable GP regression with derivative observations.
 
 
 
@@ -117,3 +117,17 @@ python run.py \
 | `nbody.n_particles` | Number of particles in N-body system |
 | `nbody.n_dims` | Spatial dimensions for N-body (default: 3) |
 
+
+
+## Citation
+
+```
+@article{huang2026scaling,
+  title={Scaling Gaussian Process Regression with Full Derivative Observations},
+  author={Huang, Daniel},
+  journal={Transactions on Machine Learning Research},
+  year={2026},
+  month={January},
+  url={https://openreview.net/forum?id=fbonXp38r9}
+}
+```
