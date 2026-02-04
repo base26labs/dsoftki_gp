@@ -1,6 +1,6 @@
 # DSoftKI: Scalable GP Regression with Derivatives
 
-This repository contains an implementation of [DSoftKI](https://openreview.net/pdf?id=fbonXp38r9): scalable GP regression with derivative observations.
+This repository contains an implementation of [DSoftKI](https://arxiv.org/pdf/2505.09134?): scalable GP regression with derivative observations.
 
 
 
