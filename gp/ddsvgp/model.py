@@ -1,60 +1,66 @@
-import gpytorch
-# import sys
-#sys.path.append("../directionalvi")
-# sys.path.append("utils")
+"""DDSVGP: a variational GP whose inducing outputs include directional derivatives."""
 
-from gp.ddsvgp.RBFKernelDirectionalGrad import RBFKernelDirectionalGrad #.RBFKernelDirectionalGrad
-from gp.ddsvgp.DirectionalGradVariationalStrategy import DirectionalGradVariationalStrategy #.DirectionalGradVariationalStrategy
+from gpytorch.distributions import MultivariateNormal
+from gpytorch.kernels import ScaleKernel
+from gpytorch.means import ConstantMean
+from gpytorch.models import ApproximateGP
+from gpytorch.variational import CholeskyVariationalDistribution
+
+from gp.ddsvgp.DirectionalGradVariationalStrategy import DirectionalGradVariationalStrategy
 
 
-# =============================================================================
-# Model
-# =============================================================================
+class DDSVGP(ApproximateGP):
+    """Sparse variational GP over function values and directional derivatives.
 
-class DDSVGP(gpytorch.models.ApproximateGP):
-    def __init__(self, inducing_points, inducing_directions, kernel, use_scale=True, learn_inducing_locations=True):
+    Rather than carrying a full gradient at every inducing point, each of the
+    ``m`` points carries derivatives along ``p`` chosen directions, giving
+    ``m * (1 + p)`` variational parameters. ``inducing_directions`` holds the
+    directions for all points in a single flat block, so ``p`` is recovered as
+    the ratio of its length to the number of inducing points.
+
+    Args:
+        inducing_points: ``(m, d)`` tensor of initial inducing locations.
+        inducing_directions: ``(m * p, d)`` tensor of directions, blocked by point.
+        kernel: base kernel producing the directional-derivative block covariance
+            (e.g. :class:`RBFKernelDirectionalGrad`).
+        use_scale: wrap ``kernel`` in a learned ``ScaleKernel``.
+        learn_inducing_locations: optimize the inducing locations during training.
+    """
+
+    def __init__(
+        self,
+        inducing_points,
+        inducing_directions,
+        kernel,
+        use_scale=True,
+        learn_inducing_locations=True,
+    ):
+        # Set before super().__init__() because the variational strategy is
+        # constructed with `self` and reads these during its own setup.
         self.num_inducing = len(inducing_points)
-        self.num_directions = int(len(inducing_directions)/self.num_inducing) # num directions per point
-        num_directional_derivs = self.num_directions*self.num_inducing
+        self.num_directions = len(inducing_directions) // self.num_inducing
+        num_variational = self.num_inducing * (1 + self.num_directions)
 
-        # variational distribution q(u,g)
-        variational_distribution = gpytorch.variational.CholeskyVariationalDistribution(
-        self.num_inducing + num_directional_derivs)
-
-        print("In DDSVGP, learn_inducing_locations = ", learn_inducing_locations)
-        print("In DDSVGP, inducing points = ", inducing_points)
-
-        # variational strategy q(f)
-        variational_strategy = DirectionalGradVariationalStrategy(
-            self,
-            inducing_points,
-            inducing_directions,
-            variational_distribution,
-            learn_inducing_locations=learn_inducing_locations
+        super().__init__(
+            DirectionalGradVariationalStrategy(
+                self,
+                inducing_points,
+                inducing_directions,
+                CholeskyVariationalDistribution(num_variational),
+                learn_inducing_locations=learn_inducing_locations,
+            )
         )
-        super(DDSVGP, self).__init__(variational_strategy)
 
-        # Set the mean and covariance
-        self.mean_module = gpytorch.means.ConstantMean()
+        self.mean_module = ConstantMean()
         self.use_scale = use_scale
-        if use_scale:
-            self.covar_module = gpytorch.kernels.ScaleKernel(kernel)
-        else:
-            self.covar_module = kernel
+        self.covar_module = ScaleKernel(kernel) if use_scale else kernel
 
     def forward(self, x, **params):
-        mean_x  = self.mean_module(x)
-        covar_x = self.covar_module(x, **params)
-        return gpytorch.distributions.MultivariateNormal(mean_x, covar_x)
+        return MultivariateNormal(self.mean_module(x), self.covar_module(x, **params))
 
     def get_lengthscale(self) -> float:
-        if self.use_scale:
-            return self.covar_module.base_kernel.lengthscale.cpu()
-        else:
-            return self.covar_module.lengthscale.cpu()
-        
+        kernel = self.covar_module.base_kernel if self.use_scale else self.covar_module
+        return kernel.lengthscale.cpu()
+
     def get_outputscale(self) -> float:
-        if self.use_scale:
-            return self.covar_module.outputscale.cpu()
-        else:
-            return 1.
+        return self.covar_module.outputscale.cpu() if self.use_scale else 1.0

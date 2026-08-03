@@ -369,7 +369,7 @@ if __name__ == "__main__":
         # Original UCI dataset setup
         if not os.path.exists("./uci_datasets"):
             print("trying to clone")
-            subprocess.run(["git", "clone", "git@github.com:treforevans/uci_datasets.git"], shell=False)
+            subprocess.run(["git", "clone", "https://github.com/treforevans/uci_datasets.git"], shell=False)
         from pathlib import Path
         base_dir = Path(__file__).parent / "uci_datasets" / "uci_datasets"
 

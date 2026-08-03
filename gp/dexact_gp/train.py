@@ -78,18 +78,9 @@ def train_gp(config, train_dataset, test_dataset):
     likelihood = gpytorch.likelihoods.MultitaskGaussianLikelihood(num_tasks=n_tasks)  # Value + x-derivative + y-derivative
     likelihood.noise = torch.tensor([noise]).to(device=device)
     # print("HERE", noise, likelihood.noise)
-    if True:
-        model = DExactGP(train_x, train_y, likelihood, kernel, use_scale=use_scale).to(device=device)
-        mll = CGDMLL(likelihood, model, max_cg_iters=max_cg_iters, cg_tolerance=cg_tolerance)
-        # mll = gpytorch.mlls.ExactMarginalLogLikelihood(likelihood, model)
-    else:
-        from gp.dexact_gp.keops_rbf_kernel_grad import KeOpsRBFKernelGrad
-        ard_num_dims = train_dataset.dim if config.model.use_ard else None
-        kernel = KeOpsRBFKernelGrad(ard_num_dims=ard_num_dims)
-        model = DExactGP(train_x, train_y, likelihood, kernel, use_scale=use_scale).to(device=device)
-        mll = gpytorch.mlls.ExactMarginalLogLikelihood(likelihood, model)
-        # test_likelihood = gpytorch.likelihoods.GaussianLikelihood(noise_constraint=GreaterThan(noise_constraint)).to(device=device)
-        # test_model = KeOpsExactGPModel(test_x, test_y, test_likelihood, kernel_type=kernel_type, nu=nu, use_scale=use_scale, ard_num_dims=ard_num_dims).to(device=device)
+    model = DExactGP(train_x, train_y, likelihood, kernel, use_scale=use_scale).to(device=device)
+    mll = CGDMLL(likelihood, model, max_cg_iters=max_cg_iters, cg_tolerance=cg_tolerance)
+    # mll = gpytorch.mlls.ExactMarginalLogLikelihood(likelihood, model)
 
     # Training parameters
     model.train()

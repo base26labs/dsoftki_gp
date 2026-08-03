@@ -23,6 +23,8 @@ def conjugate_gradient(A, b, max_iter=20, tolerance=1e-5, preconditioner=None):
     Copyright (c) 2022, Wesley Maddox, Andres Potapczynski, Andrew Gordon Wilson
     All rights reserved.
 
+    BSD 2-Clause; see licenses/BSD-2-Clause-halfpres_gps.txt
+
     This file contains modifications to original.
     """
     if preconditioner is None:
@@ -53,6 +55,8 @@ class CGDMLL(gpytorch.mlls.ExactMarginalLogLikelihood):
     """
     Copyright (c) 2022, Wesley Maddox, Andres Potapczynski, Andrew Gordon Wilson
     All rights reserved.
+
+    BSD 2-Clause; see licenses/BSD-2-Clause-halfpres_gps.txt
 
     This file contains modifications to original.
     """

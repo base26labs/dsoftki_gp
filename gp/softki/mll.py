@@ -11,6 +11,8 @@ class HutchinsonPseudoLoss:
     Adapated from: https://github.com/AndPotap/halfpres_gps
     Copyright (c) 2022, Wesley Maddox, Andres Potapczynski, Andrew Gordon Wilson
     All rights reserved.
+
+    BSD 2-Clause; see licenses/BSD-2-Clause-halfpres_gps.txt
     """
     def __init__(self, model, num_trace_samples=10, vector_format="randn"):
         self.model = model

@@ -1,0 +1,9 @@
+*.npz
+*.npy
+*.egg-info
+__pycache__
+wandb
+output
+outputs
+.ipynb_checkpoints
+

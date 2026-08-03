@@ -1,3 +1,13 @@
+"""MD22 dataset download.
+
+If you use MD22, cite:
+
+    Chmiela, S., Vassilev-Galindo, V., Unke, O. T., Kabylda, A., Sauceda, H. E.,
+    Tkatchenko, A., & Mueller, K.-R. (2023). Accurate global machine learning
+    force fields for molecules with hundreds of atoms. Science Advances, 9(2),
+    eadf0873. https://doi.org/10.1126/sciadv.adf0873
+"""
+
 from os.path import exists
 import requests
 import tarfile

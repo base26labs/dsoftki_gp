@@ -14,6 +14,8 @@ from gpytorch.functions import pivoted_cholesky
 """
 Copyright (c) 2022, Wesley Maddox, Andres Potapczynski, Andrew Gordon Wilson
 All rights reserved.
+
+BSD 2-Clause; see licenses/BSD-2-Clause-halfpres_gps.txt
 """
 
 class HutchinsonPseudoLoss:

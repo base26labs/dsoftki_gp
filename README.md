@@ -13,6 +13,9 @@ pyenv install 3.12
 pyenv virtualenv 3.12 dsoftki
 pyenv activate dsoftki
 pip install -e .
+
+# only needed for the dsvgp / ddsvgp baselines
+git submodule update --init --recursive
 ```
 
 2. Get data

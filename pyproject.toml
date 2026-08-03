@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,6 +7,9 @@ name = "dsoftki"
 version = "0.1.0"
 description = "Scaling Gaussian Process Regression with Full Derivative Observations"
 authors = [{ name = "The DSoftKI Authors", email = "dan@base26labs.com" }]
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "licenses/*.txt"]
 
 dependencies = [
     "torch>=2.4.1",
